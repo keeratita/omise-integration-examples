@@ -1,0 +1,25 @@
+extends layout
+
+block content
+
+  include ./menu.pug
+  
+  .container
+    .row
+      .col-12
+        h1 Internet Banking
+    .row
+      .col-6
+        .card
+          .card-header Please assume that your customer has been added items to a cart, and this is a process to checkout.
+          .card-body
+            form#checkoutForm(method="post", action="/internet-banking-payment")
+              .row
+                .col-4
+                  select.form-control(name="sourceType")
+                    option(value="internet_banking_bay") Krungsri Online
+                    option(value="internet_banking_bbl") Bualuang iBanking
+                    option(value="internet_banking_ktb") KTB Netbank
+                    option(value="internet_banking_scb") SCB Easy Net
+                button.btn.btn-primary(type="submit") Proceed to checkout
+  

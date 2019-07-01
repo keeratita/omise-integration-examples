@@ -1,0 +1,54 @@
+extends layout
+
+block content
+
+  include ./menu.pug
+  
+  .container
+    .row
+      .col-12
+        h1 Credit / Debit card
+        p Use 
+          a(href="https://www.omise.co/omise-js-api", target="_blank") Omise.js
+          |  to create a token
+
+    .row
+      .col-6
+        .card
+          .card-header Please assume that your customer has been added items to a cart, and this is a process to checkout.
+          .card-body
+            form#checkoutForm(method="post", action="/credit-payment")
+
+              div#errorMessage.alert.alert-danger.d-none(role='alert') 
+              input(type="hidden",name="omiseToken")
+              .form-group.row
+                label.col-sm-3.col-form-label(for='cardNumber') Number
+                .col-sm-9
+                  input#cardNumber.form-control(type='text', placeholder='0000-0000-0000-0000')
+              .form-group.row
+                label.col-sm-3.col-form-label(for='cardName') Name
+                .col-sm-9
+                  input#cardName.form-control(type='text', placeholder='John Doe')
+              .form-group.row
+                label.col-sm-3.col-form-label(for='cardName') Expiry date
+                .col-sm-9
+                  .form-row
+                    .col-3
+                      input#cardMonth.form-control(type='number', placeholder='MM')
+                    .col-1.text-center.align-text-bottom.mt-1 /
+                    .col-4
+                      input#cardYear.form-control(type='number', placeholder='YYYY')
+              .form-group.row
+                label.col-sm-3.col-form-label(for='cardCVV') CVV
+                .col-sm-9
+                  .form-row
+                    .col-3
+                      input#cardCVV.form-control(type='text', placeholder='***')
+              div
+                button.btn.btn-primary(type="submit") Proceed to checkout
+  
+  script(src='https://cdn.omise.co/omise.js')
+  script(src='/js/pay.js')
+  script.
+    // You can get your test keys on https://dashboard.omise.co/test/keys
+    Omise.setPublicKey("pkey_test_5cid7hz6ca1n5q8r602");

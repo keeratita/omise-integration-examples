@@ -1,0 +1,26 @@
+{
+  "name": "omise-integration-examples",
+  "version": "0.0.1",
+  "description": "",
+  "main": "bin/www",
+  "scripts": {
+    "start": "node bin/www",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "omise",
+    "example",
+    "node"
+  ],
+  "author": "Keerati Tansawatcharoen",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "express-session": "^1.16.2",
+    "helmet": "^3.18.0",
+    "http-errors": "^1.7.3",
+    "omise": "github:omise/omise-node",
+    "pug": "^2.0.4"
+  }
+}

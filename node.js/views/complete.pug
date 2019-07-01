@@ -1,0 +1,29 @@
+extends layout
+
+block content
+
+  include ./menu.pug
+  
+  .container
+    .row
+      .col-12
+        if charge === null
+          h1 No order
+          .alert.alert-danger The order is invalid.
+        else
+          h1 Order #
+            span= charge.metadata.order_id
+          if charge.status === "failed"
+            .alert.alert-danger= charge.failure_message
+          else if charge.status === "expired"
+            .alert.alert-danger The order was expired.
+          else if charge.status === "reversed"
+            .alert.alert-danger The order was unhold.
+          else if charge.authorized === true && charge.paid === true
+            div The order was paid successfully.
+          else if charge.authorized === true && charge.capture === false
+            div The order was authorized successfully, but not yet paid.
+          
+          pre
+            code=JSON.stringify(charge, null, 2)
+

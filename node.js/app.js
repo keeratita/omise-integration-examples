@@ -8,8 +8,8 @@ const bodyParser = require("body-parser");
 
 // You can get your test keys on https://dashboard.omise.co/test/keys
 const omise = require("omise")({
-  publicKey: "pkey_test_5cid7hz6ca1n5q8r602", // YOUR PUBLIC KEY
-  secretKey: "skey_test_5ftlenijjr36valcrhd" // YOUR SECRET KEY
+  publicKey: "pkey_test_5fzr2jki9na3ooq2qxg", // YOUR PUBLIC KEY
+  secretKey: "skey_test_5fwa62a6nnfablgifxp" // YOUR SECRET KEY
 });
 
 // view engine setup
@@ -27,7 +27,8 @@ app.use(
 );
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use((req, res, next) => {
-  req.completeUrl = req.protocol + "://" + req.headers.host + "/complete";
+  req.orderReceivedUrl =
+    req.protocol + "://" + req.headers.host + "/order-received";
   next();
 });
 
@@ -61,7 +62,7 @@ app.post("/credit-payment", async (req, res, next) => {
       metadata: {
         order_id
       },
-      return_uri: req.completeUrl
+      return_uri: req.orderReceivedUrl
     });
 
     /**
@@ -74,7 +75,7 @@ app.post("/credit-payment", async (req, res, next) => {
 
     // charge status: https://www.omise.co/charging-cards#charge-status-(with-3-d-secure-enabled)
     if (charge.authorized === true) {
-      res.redirect(req.completeUrl);
+      res.redirect(req.orderReceivedUrl);
     } else if (charge.authorize_uri !== null) {
       res.redirect(charge.authorize_uri);
     } else {
@@ -96,7 +97,7 @@ app.get("/internet-banking-payment", (req, res) => {
 /**
  * POST /internet-banking-payment
  */
-app.post("/internet-banking-payment", async (req, res) => {
+app.post("/internet-banking-payment", async (req, res, next) => {
   try {
     const { sourceType } = req.body;
     const order_id = getOrderId();
@@ -107,7 +108,7 @@ app.post("/internet-banking-payment", async (req, res) => {
       metadata: {
         order_id
       },
-      return_uri: req.completeUrl,
+      return_uri: req.orderReceivedUrl,
       source: {
         type: sourceType
       }
@@ -128,11 +129,11 @@ app.post("/internet-banking-payment", async (req, res) => {
 });
 
 /**
- * GET /complete
+ * GET /order-received
  * Display an order status
  */
-app.get("/complete", async (req, res, next) => {
-  const title = "Complete";
+app.get("/order-received", async (req, res, next) => {
+  const title = "Order received";
   let charge = null;
 
   try {
@@ -141,7 +142,7 @@ app.get("/complete", async (req, res, next) => {
       charge = await omise.charges.retrieve(charge_id);
     }
 
-    res.render("complete", { title, charge });
+    res.render("order-received", { title, charge });
   } catch (error) {
     next(error);
   }

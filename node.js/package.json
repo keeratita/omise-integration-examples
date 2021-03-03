@@ -21,6 +21,6 @@
     "helmet": "^3.23.3",
     "http-errors": "^1.8.0",
     "omise": "github:omise/omise-node",
-    "pug": "^2.0.4"
+    "pug": "^3.0.1"
   }
 }
